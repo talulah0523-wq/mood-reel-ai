@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
 
 async function render() {
@@ -35,7 +35,7 @@ test("片库数量与新增数据不会在页面中硬编码", async () => {
   assert.doesNotMatch(page, /已收录\s*["'`{ ]*3[,，]?000\s*部/);
   assert.doesNotMatch(page, /10[,，]?000\+\s*部/);
   assert.match(page, /电影数据持续更新/);
-  assert.match(page, /const films: Film\[\] = \[\.\.\.featuredFilms, \.\.\.catalogAdditions\]/);
+  assert.match(page, /\[\.\.\.featuredFilms, \.\.\.catalogAdditions\]\.map/);
   assert.doesNotMatch(page, /extendedCatalog/);
 
   const featuredCount = page
@@ -43,4 +43,14 @@ test("片库数量与新增数据不会在页面中硬编码", async () => {
     .match(/^\s{4}title:/gm)?.length ?? 0;
   const catalogCount = catalog.match(/^\s{6}\["/gm)?.length ?? 0;
   assert.equal(featuredCount + catalogCount, 200);
+});
+
+test("每部电影都有本地海报", async () => {
+  const [posterMap, posterFiles] = await Promise.all([
+    readFile(new URL("../app/posters.ts", import.meta.url), "utf8"),
+    readdir(new URL("../public/posters", import.meta.url)),
+  ]);
+
+  assert.equal(posterMap.split('"/posters/film-').length - 1, 200);
+  assert.equal(posterFiles.filter((file) => /^film-\d{3}\.jpg$/.test(file)).length, 200);
 });

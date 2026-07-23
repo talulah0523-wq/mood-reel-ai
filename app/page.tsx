@@ -2,6 +2,7 @@
 
 import { FormEvent, useMemo, useState } from "react";
 import { catalogAdditions, type Film, type MoodKey } from "./catalog";
+import { posterFor } from "./posters";
 import {
   filmId,
   recommendFilms,
@@ -480,7 +481,10 @@ const featuredFilms: Film[] = [
   },
 ];
 
-const films: Film[] = [...featuredFilms, ...catalogAdditions];
+const films: Film[] = [...featuredFilms, ...catalogAdditions].map((film) => ({
+  ...film,
+  poster: posterFor(film.title) ?? film.poster,
+}));
 
 const quickMoodGroups = [
   [
@@ -836,11 +840,20 @@ export default function Home() {
             const film = result.film;
             return (
             <article className={`film-card ${chosenFilmId === result.filmId ? "is-chosen" : ""}`} key={`${result.filmId}-${round}-${individualRounds[index]}`}>
-              <div className={`poster ${film.poster}`} role="img" aria-label={`${film.title}的抽象电影海报`}>
+              <div className="poster">
+                <span className="poster-title" aria-hidden="true">{film.title}</span>
+                <i className="poster-light" aria-hidden="true" />
+                <img
+                  className="poster-image"
+                  src={film.poster}
+                  alt={`${film.title}电影海报`}
+                  loading="lazy"
+                  onError={(event) => {
+                    event.currentTarget.hidden = true;
+                  }}
+                />
                 <span className="poster-index">0{index + 1}</span>
                 <span className="card-role">{cardRoles[index]}</span>
-                <span className="poster-title">{film.title}</span>
-                <i className="poster-light" />
               </div>
               <div className="film-content">
                 <div className="film-meta">{[film.year, film.country, film.duration].filter(Boolean).join(" · ")}</div>
