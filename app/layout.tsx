@@ -10,20 +10,20 @@ export async function generateMetadata(): Promise<Metadata> {
 
   return {
     metadataBase: new URL(origin),
-    title: "接住我 · 情绪电影伴侣",
-    description: "说说你此刻的心情，得到三部真正适合当下的电影，以及关于画面、节奏、人物和故事的推荐理由。",
+    title: "MOOD REEL · 为此刻的心情，找一部电影",
+    description: "说说你此刻的心情，MOOD REEL 从画面、节奏与故事里，为今晚选出三种电影可能。",
     icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
     openGraph: {
-      title: "接住我 · 情绪电影伴侣",
-      description: "先理解你的此刻，再推荐一部电影。",
+      title: "MOOD REEL · 为此刻的心情，找一部电影",
+      description: "让此刻，遇见一部电影。",
       type: "website",
       url: origin,
-      images: [{ url: "/og.png", width: 1800, height: 1005, alt: "接住我情绪电影伴侣" }],
+      images: [{ url: "/og.png", width: 1800, height: 1005, alt: "MOOD REEL 情绪电影推荐" }],
     },
     twitter: {
       card: "summary_large_image",
-      title: "接住我 · 情绪电影伴侣",
-      description: "先理解你的此刻，再推荐一部电影。",
+      title: "MOOD REEL · 为此刻的心情，找一部电影",
+      description: "让此刻，遇见一部电影。",
       images: ["/og.png"],
     },
   };
