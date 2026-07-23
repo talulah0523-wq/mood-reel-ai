@@ -31,6 +31,15 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
+
+# generated movie import artifacts and resumable caches
+/.cache/movie-import/
+/data/raw/
+/data/cache/
+/data/processed/
+/data/movies/catalog.json
+/data/movie-import/
 
 # vercel
 .vercel
