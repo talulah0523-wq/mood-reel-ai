@@ -659,7 +659,7 @@ export default function Home() {
         </a>
         <nav aria-label="主要导航">
           <a href="#how">如何推荐</a>
-          <a href="#recommendations">今晚三部</a>
+          <a href="#recommendations">此刻三部</a>
           <span className="issue-pill"><i /> 推荐系统体验版</span>
         </nav>
       </header>
@@ -667,9 +667,9 @@ export default function Home() {
       <section className="hero" id="top">
         <div className="hero-copy">
           <p className="eyebrow"><span>VOL. 01</span> FILMS FOR THIS MOMENT</p>
-          <h1>为此刻的心情，<br /><em>找一部电影。</em></h1>
+          <h1>此刻，想看一部<br /><em>怎样的电影？</em></h1>
           <p className="intro">
-            想笑、想哭、想心动，或者只是想暂时离开现实一会儿。说说现在的心情，我们从画面、节奏和故事里，为今晚挑出三种可能。
+            想笑、想哭、想心动，或者只是想暂时离开现实一会儿。说说此刻的你，我们从画面、节奏、人物和故事里，选出三种可能。
           </p>
           <div className="edition-note" aria-label="电影库说明">
             <span>电影数据库</span>
@@ -695,7 +695,7 @@ export default function Home() {
               id="mood"
               value={mood}
               onChange={(event) => setMood(event.target.value)}
-              placeholder="比如：有点累，想安静下来；或者想看点轻松的……"
+              placeholder="比如：有点累，想安静下来；或者想看点轻松的，不想承受太多。"
               maxLength={120}
             />
             <div className="quick-moods" aria-label="快速选择心情">
@@ -728,7 +728,7 @@ export default function Home() {
               </div>
             )}
 
-            <label htmlFor="reference">一部曾经打动你的电影 <span>选填</span></label>
+            <label htmlFor="reference">一部曾经打动过你的电影 <span>选填</span></label>
             <div className="reference-search">
               <input
                 id="reference"
@@ -750,7 +750,7 @@ export default function Home() {
                 </div>
               )}
             </div>
-            <p className="reference-principle">现在的心情决定今晚看什么，喜欢过的电影帮助我们了解你怎么看电影。</p>
+            <p className="reference-principle">选填。它帮助我们理解你的偏好，但会优先考虑你此刻的心情。</p>
             {selectedReference && (
               <div className="reference-selected" role="status">
                 <div><span>已选参考电影</span><strong>{selectedReference.title} · {selectedReference.year}</strong><small>{selectedReference.original}</small></div>
@@ -774,16 +774,16 @@ export default function Home() {
               <div className="reference-conflict" role="status">
                 <p>{referencePriority === "current-mood"
                   ? `你现在的观影需求与《${selectedReference.title}》的情绪强度不同。这次优先现在的心情，只参考它打动你的方式。`
-                  : `这次会更接近《${selectedReference.title}》的${selectedAspects.length ? selectedAspects.join("、") : "节奏与情绪特征"}，但仍避开当前心情明确排除的高负担与高冲突。`}</p>
+                  : `当前心情仍是主要条件；在不冲突的前提下，更多参考《${selectedReference.title}》的${selectedAspects.length ? selectedAspects.join("、") : "节奏与情绪特征"}。`}</p>
                 <div>
                   <button type="button" aria-pressed={referencePriority === "current-mood"} className={referencePriority === "current-mood" ? "is-selected" : ""} onClick={() => setReferencePriority("current-mood")}>以现在的心情为主</button>
-                  <button type="button" aria-pressed={referencePriority === "closer-reference"} className={referencePriority === "closer-reference" ? "is-selected" : ""} onClick={() => setReferencePriority("closer-reference")}>更接近这部电影</button>
+                  <button type="button" aria-pressed={referencePriority === "closer-reference"} className={referencePriority === "closer-reference" ? "is-selected" : ""} onClick={() => setReferencePriority("closer-reference")}>加强参考偏好</button>
                 </div>
               </div>
             )}
             {!canSubmit && <p className="input-guidance">写一句，或选择一种心情</p>}
             <button className="primary-button" type="submit" disabled={!canSubmit}>
-              <span>看看今晚的三部</span><b aria-hidden="true">→</b>
+              <span>为此刻选三部</span><b aria-hidden="true">→</b>
             </button>
             <p className="privacy-note">不定义你的心情，也不剧透电影。</p>
           </form>
@@ -795,21 +795,21 @@ export default function Home() {
         <div className="section-number">02</div>
         <div className="reading-title">
           <p className="eyebrow">MOOD TRANSLATION</p>
-          <h2>此刻的观影线索</h2>
+          <h2>我们听见了什么</h2>
         </div>
         <div className="reading-result">
-          <span>适合靠近</span>
+          <span>你的此刻</span>
           <strong>{moodReading.label}</strong>
           <p>
             {submittedReference
               ? submittedPriority === "closer-reference"
-                ? `更接近《${submittedReference.title}》的${submittedAspects.length ? submittedAspects.join("、") : "节奏与情绪特征"}，同时继续避开过度压抑、高情绪负担与高强度冲突。`
+                ? `当前心情仍是主要条件；在不冲突的前提下，更多参考《${submittedReference.title}》的${submittedAspects.length ? submittedAspects.join("、") : "节奏与情绪特征"}。`
                 : `当前心情优先；参考《${submittedReference.title}》的${submittedAspects.length ? submittedAspects.join("、") : "类型、节奏与情绪特征"}，但不默认寻找同类型电影。`
               : "我们把你的描述整理成情绪浓度、叙事速度、人物距离和想象力，再沿着这些线索寻找电影。"}
           </p>
         </div>
         <div className="reading-avoid">
-          <span>暂时避开</span>
+          <span>这次先避开</span>
           <p>{moodReading.avoidLabel}</p>
         </div>
         <div className="pipeline" aria-label="推荐流程">
@@ -818,19 +818,19 @@ export default function Home() {
       </section>
 
       <section className="recommendations" id="recommendations">
-        <div className="reel-bridge"><span />沿着这些线索，找到今晚的三部。<span /></div>
+        <div className="reel-bridge"><span />沿着这些线索，找到此刻的三部。<span /></div>
         <div className="section-head">
           <div>
-            <p className="eyebrow"><span>03</span> TONIGHT&apos;S REEL</p>
-            <h2>今晚的三部</h2>
-            <p className="section-summary">不是预测你会喜欢什么，而是说明它们为什么适合现在。</p>
+            <p className="eyebrow"><span>03</span> FOR THIS MOMENT</p>
+            <h2>此刻的三部</h2>
+            <p className="section-summary">不是猜你喜欢，而是它们为什么适合现在的你。</p>
             <div className="result-basis">
-              <span>选片线索：{moodReading.label}{submittedReference ? ` · ${submittedPriority === "closer-reference" ? "参考电影优先" : "当前心情优先"}` : ""}</span>
+              <span>选片线索：{moodReading.label}{submittedReference ? ` · ${submittedPriority === "closer-reference" ? "参考偏好增强" : "当前心情优先"}` : ""}</span>
               <button type="button" onClick={adjustMood}>修改心情</button>
             </div>
           </div>
           <button className="shuffle" type="button" onClick={reshuffle}>
-            <span aria-hidden="true">↻</span> 换一批
+            <span aria-hidden="true">↻</span> 再换三部
           </button>
         </div>
         {shuffleNotice && <p className="shuffle-notice" role="status" aria-live="polite">{shuffleNotice}</p>}
@@ -877,15 +877,15 @@ export default function Home() {
                 {expandedCards[index] && <div className="film-detail"><span>看前提醒</span><p>{result.explanation.caution}</p></div>}
                 <div className="film-actions">
                   <button className="watch-button" type="button" onClick={() => { setChosenFilmId(result.filmId); setCopiedTitle(null); }}>
-                    {chosenFilmId === result.filmId ? "已选定 ✓" : "今晚看它"}
+                    {chosenFilmId === result.filmId ? "已选定 ✓" : "就看这部"}
                   </button>
-                  <button type="button" onClick={() => replaceFilm(index)}>换一部</button>
+                  <button type="button" onClick={() => replaceFilm(index)}>换掉这部</button>
                   <button
                     type="button"
                     aria-expanded={expandedCards[index]}
                     onClick={() => setExpandedCards((value) => value.map((item, itemIndex) => itemIndex === index ? !item : item))}
                   >
-                    {expandedCards[index] ? "收起提醒" : "看前提醒"}
+                    {expandedCards[index] ? "收起详情" : "查看详情"}
                   </button>
                 </div>
                 {replacementNotice?.index === index && (
@@ -936,7 +936,7 @@ export default function Home() {
           <span className="brand-mark" aria-hidden="true"><b>M</b><b>R</b><i /><i /></span>
           <span><strong>MOOD REEL</strong><small>让此刻，遇见一部电影</small></span>
         </div>
-        <p>为此刻的心情，找一部电影。</p>
+        <p>让此刻，遇见一部电影。</p>
         <p className="prototype-note">年份、片长与原始片名来自电影数据源 · 推荐概括由产品生成 · 不提供播放资源</p>
       </footer>
     </main>

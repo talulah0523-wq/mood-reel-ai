@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(origin),
     title: "MOOD REEL · 为此刻的心情，找一部电影",
-    description: "说说你此刻的心情，MOOD REEL 从画面、节奏与故事里，为今晚选出三种电影可能。",
+    description: "说说此刻的你，MOOD REEL 从画面、节奏、人物和故事里，选出三种电影可能。",
     icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
     openGraph: {
       title: "MOOD REEL · 为此刻的心情，找一部电影",

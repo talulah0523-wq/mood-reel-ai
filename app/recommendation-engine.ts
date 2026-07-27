@@ -251,7 +251,7 @@ function makeExplanation(film: Film, profile: MoodProfile, reference: Film | nul
       comparison = `相比《${reference.title}》，它保留可辨认的叙事韵律，但把刺激从 ${referenceFeatures.stimulation}/5 降到 ${features.stimulation}/5、情绪负担从 ${referenceFeatures.emotionalWeight}/5 降到 ${features.emotionalWeight}/5。`;
     }
   }
-  return { viewingFeel: base, moodMatch: comparison, caution: film.caution || "建议先留意影片的节奏与题材强度，再决定是否适合今晚。" };
+  return { viewingFeel: base, moodMatch: comparison, caution: film.caution || "建议先留意影片的节奏与题材强度，再决定是否适合此刻。" };
 }
 
 function diversitySimilarity(left: Film, right: Film) {

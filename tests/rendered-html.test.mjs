@@ -21,7 +21,10 @@ test("服务端渲染 MOOD REEL 当前首页", async () => {
 
   const html = await response.text();
   assert.match(html, /MOOD REEL/);
-  assert.match(html, /为此刻的心情/);
+  assert.match(html, /此刻，想看一部/);
+  assert.match(html, /为此刻选三部/);
+  assert.match(html, /让此刻，遇见一部电影/);
+  assert.doesNotMatch(html, /接住我|情绪电影伴侣|今晚的三部|为今晚选三部/);
   assert.match(html, /电影数据持续更新/);
   assert.doesNotMatch(html, /已收录\s*3[,，]?000\s*部/);
   assert.doesNotMatch(html, /Your site is taking shape|codex-preview/);
@@ -35,6 +38,11 @@ test("片库数量与新增数据不会在页面中硬编码", async () => {
   assert.doesNotMatch(page, /已收录\s*["'`{ ]*3[,，]?000\s*部/);
   assert.doesNotMatch(page, /10[,，]?000\+\s*部/);
   assert.match(page, /电影数据持续更新/);
+  assert.match(page, /我们听见了什么/);
+  assert.match(page, /FOR THIS MOMENT/);
+  assert.match(page, /此刻的三部/);
+  assert.match(page, /不是猜你喜欢，而是它们为什么适合现在的你/);
+  assert.match(page, /当前心情仍是主要条件/);
   assert.match(page, /\[\.\.\.featuredFilms, \.\.\.catalogAdditions\]\.map/);
   assert.doesNotMatch(page, /extendedCatalog/);
 
