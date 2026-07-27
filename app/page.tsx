@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { catalogAdditions, type Film, type MoodKey } from "./catalog";
 import { posterFor } from "./posters";
+import { posterPositionFor } from "./poster-positions";
 import {
   filmId,
   recommendFilms,
@@ -848,6 +849,7 @@ export default function Home() {
                   src={film.poster}
                   alt={`${film.title}电影海报`}
                   loading="lazy"
+                  style={{ objectPosition: posterPositionFor(film.title) }}
                   onError={(event) => {
                     event.currentTarget.hidden = true;
                   }}

@@ -31,12 +31,53 @@ const requestHeaders = {
 };
 
 const posterOverrides = {
+  朝圣之路: {
+    matchedTitle: "The Way",
+    imageFile: "uaRfG7n92IiuYcKLl7LJo2gr6qO.jpg",
+    searchUrl: "https://www.themoviedb.org/movie/59468-the-way",
+  },
+  转山: {
+    matchedTitle: "One Mile Above",
+    imageFile: "lQW5zxfu0AtvmMsHpiACXLzBl0d.jpg",
+    searchUrl: "https://www.themoviedb.org/movie/136779",
+  },
   眼镜: {
     matchedTitle: "Glasses",
     imageFile: "m1SyPPx9gvHFLNKZbad1VqohyW0.jpg",
     searchUrl: "https://www.themoviedb.org/search?query=Megane%20y%3A2007",
   },
+  素媛: {
+    matchedTitle: "Hope",
+    imageFile: "x9yjkm9gIz5qI5fJMUTfBnWiB2o.jpg",
+    searchUrl: "https://www.themoviedb.org/movie/255709",
+  },
+  房间: {
+    matchedTitle: "Room",
+    imageFile: "2hHDMeYyZjbGWn0BeNH1cTMxuM7.jpg",
+    searchUrl: "https://www.themoviedb.org/movie/264644-room",
+  },
+  地心引力: {
+    matchedTitle: "Gravity",
+    imageFile: "kZ2nZw8D681aphje8NJi8EfbL1U.jpg",
+    searchUrl: "https://www.themoviedb.org/movie/49047-gravity",
+  },
 };
+
+function decodeHtml(value) {
+  return value
+    .replaceAll("&#39;", "'")
+    .replaceAll("&#x27;", "'")
+    .replaceAll("&#8217;", "'")
+    .replaceAll("&amp;", "&")
+    .replaceAll("&quot;", '"');
+}
+
+function normalizeTitle(value) {
+  return decodeHtml(value)
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[^a-z0-9\u3400-\u9fff]/g, "");
+}
 
 async function findPoster(film) {
   if (posterOverrides[film.title]) return posterOverrides[film.title];
@@ -47,9 +88,10 @@ async function findPoster(film) {
     film.title,
   ]) {
     const query = encodeURIComponent(searchText);
+    const searchUrl = `https://www.themoviedb.org/search/movie?query=${query}`;
     let response;
     for (let attempt = 0; attempt < 5; attempt += 1) {
-      response = await fetch(`https://www.themoviedb.org/search?query=${query}`, {
+      response = await fetch(searchUrl, {
         headers: requestHeaders,
       });
       if (response.status !== 429) break;
@@ -58,14 +100,24 @@ async function findPoster(film) {
     if (!response?.ok) throw new Error(`Search failed with ${response?.status}`);
 
     const html = await response.text();
-    const result = html.match(
-      /<img alt="([^"]+)"[^>]+srcset="[^"]*\/t\/p\/w188_and_h282_face\/([^" ]+)/,
+    const candidates = [...html.matchAll(
+      /<img alt="([^"]+)"[^>]+srcset="[^"]*\/t\/p\/w188_and_h282_face\/([^" ]+)[\s\S]{0,1600}?class="release_date[^>]*>([^<]+)/g,
+    )].map((result) => ({
+      matchedTitle: decodeHtml(result[1]),
+      imageFile: result[2],
+      year: result[3].match(/\d{4}/)?.[0],
+    }));
+    const result = candidates.find((candidate) =>
+      candidate.year === film.year &&
+      [film.original, film.title].some((title) =>
+        normalizeTitle(candidate.matchedTitle) === normalizeTitle(title)
+      )
     );
     if (result) {
       return {
-        matchedTitle: result[1],
-        imageFile: result[2],
-        searchUrl: `https://www.themoviedb.org/search?query=${query}`,
+        matchedTitle: result.matchedTitle,
+        imageFile: result.imageFile,
+        searchUrl,
       };
     }
   }

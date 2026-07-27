@@ -62,3 +62,18 @@ test("每部电影都有本地海报", async () => {
   assert.equal(posterMap.split('"/posters/film-').length - 1, 200);
   assert.equal(posterFiles.filter((file) => /^film-\d{3}\.jpg$/.test(file)).length, 200);
 });
+
+test("高风险海报映射与手机裁切重心已校正", async () => {
+  const [manifest, positions, page] = await Promise.all([
+    readFile(new URL("../public/posters/manifest.json", import.meta.url), "utf8"),
+    readFile(new URL("../app/poster-positions.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/page.tsx", import.meta.url), "utf8"),
+  ]);
+
+  for (const matchedTitle of ["The Way", "One Mile Above", "Hope", "Room", "Gravity"]) {
+    assert.match(manifest, new RegExp(`"matchedTitle": "${matchedTitle}"`));
+  }
+  assert.doesNotMatch(manifest, /"matchedTitle": "(?:The Only Way Is Essex|Made in Japan: Kora!|Saving Hope|Room 101|Gravity Falls)"/);
+  assert.match(positions, /"利刃出鞘": "center 76%"/);
+  assert.match(page, /posterPositionFor\(film\.title\)/);
+});
